@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>印即得彩卡报价工具V1</title>
+<meta name="description" content="印即得彩卡报价工具V1">
+<style>
+:root{
+  --brand:#c2410c; --brand2:#ea580c;
+  --blue:#1d4ed8; --green:#047857;
+  --line:#e5e7eb; --sub:#6b7280; --bg:#e9edf3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:#1c2333;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.wrap{max-width:760px;width:100%;margin:0 auto;padding:12px;flex:1}
+
+header{background:linear-gradient(135deg,#7c2d12,#ea580c 60%,#f59e0b);color:#fff;border-radius:14px;padding:20px 16px;text-align:center;margin-bottom:12px;box-shadow:0 6px 18px rgba(194,65,12,.35)}
+header h1{font-size:28px;font-weight:800;letter-spacing:3px;text-shadow:0 2px 6px rgba(0,0,0,.25)}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.07);padding:14px;margin-bottom:12px}
+.card h2{font-size:16px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card.p1 h2{color:var(--blue)}
+.card.p1 h2::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--blue)}
+.card.p2 h2{color:var(--brand)}
+.card.p2 h2::before{content:"";width:5px;height:17px;border-radius:3px;background:var(--brand)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f0f5ff;border-radius:10px;padding:7px 10px;min-width:0}
+.field label{font-size:14px;color:#1e3a8a;white-space:nowrap;font-weight:600}
+.field input,.field select{width:118px;padding:8px;border:2px solid #cbd5e1;border-radius:9px;font-size:16px;background:#fff;color:#1c2333;text-align:right;font-weight:600;flex-shrink:0}
+.field input:focus,.field select:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(234,88,12,.15)}
+.field.w{grid-column:1/-1}
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr}
+  .field{padding:6px 10px}
+  .field label{font-size:14px}
+  .field input,.field select{width:130px;font-size:16px;padding:7px}
+}
+
+/* 表头 + 计算行：统一栅格，保证手机上也是一行 */
+.rowg{display:grid;grid-template-columns:26px 1fr 1fr 1fr 86px 100px 30px;gap:6px;align-items:center}
+.thead{padding:0 10px 6px;font-size:12px;color:var(--sub);font-weight:700}
+.thead .c{text-align:center}
+.row{background:#fff8f3;border:2px solid #fed7aa;border-radius:12px;padding:6px;margin-bottom:8px}
+.row .idx{font-size:15px;font-weight:800;color:#9a3412;text-align:center}
+.row input{width:100%;min-width:0;padding:8px 2px;border:2px solid #fed7aa;border-radius:9px;font-size:16px;text-align:center;font-weight:600}
+.row input:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(234,88,12,.15)}
+.row .show{text-align:center;min-width:0}
+.row .show .k{font-size:10px;color:var(--sub);line-height:1.1}
+.row .show .v{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2;white-space:nowrap}
+.row .show.s1 .v{color:var(--blue)}
+.row .show.s2 .v{color:var(--brand)}
+.row .del{height:38px;width:30px;background:#fef2f2;border:2px solid #fecaca;color:#b91c1c;border-radius:9px;font-size:17px;cursor:pointer;line-height:1;padding:0}
+.row .del:hover{background:#fee2e2}
+@media(max-width:480px){
+  .rowg{grid-template-columns:18px 1fr 1fr 1fr 72px 82px 24px;gap:4px}
+  .thead{padding:0 6px 4px;font-size:10px}
+  .row{padding:4px;margin-bottom:6px}
+  .row .idx{font-size:13px}
+  .row input{padding:7px 1px;font-size:14px;border-width:1.5px}
+  .row .show .k{font-size:9px}
+  .row .show .v{font-size:12.5px}
+  .row .del{height:34px;width:24px;font-size:15px;border-width:1.5px}
+}
+
+.addrow{width:100%;padding:10px;background:#fff;border:2px dashed #fdba74;border-radius:11px;color:var(--brand2);font-size:15px;font-weight:700;cursor:pointer}
+.addrow:hover{background:#fff7ed}
+
+.totalbar{background:linear-gradient(135deg,#9a3412,#ea580c);color:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 6px 18px rgba(194,65,12,.35)}
+.totalbar .lbl{font-size:14px;opacity:.9;text-align:center}
+.totalbar .num{font-size:42px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;line-height:1.2;text-shadow:0 2px 6px rgba(0,0,0,.25)}
+@media(max-width:480px){ .totalbar .num{font-size:36px} }
+
+.actions{display:flex;gap:10px;margin-bottom:12px}
+.actions button{flex:1;padding:12px;border:none;border-radius:11px;font-size:16px;font-weight:700;cursor:pointer}
+.btn-copy{background:#fff;border:2px solid var(--brand2);color:var(--brand2)}
+.btn-copy:hover{background:#fff7ed}
+
+footer{text-align:center;color:#9ca3af;font-size:13px;padding:6px 0 20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>印即得彩卡报价工具V1</h1>
+</header>
+
+<div class="card p1">
+  <h2>基础参数</h2>
+  <div class="grid">
+    <div class="field">
+      <label>纸张克重（G）</label>
+      <input type="number" id="gram" value="250" min="1" step="10">
+    </div>
+    <div class="field">
+      <label>纸种</label>
+      <select id="ptype">
+        <option value="单卡" selected>单卡</option>
+        <option value="铜版">铜版</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>吨价（元）</label>
+      <input type="number" id="ton" value="4200" min="0" step="10">
+    </div>
+    <div class="field">
+      <label>上机费（元）</label>
+      <input type="number" id="setup" value="140" min="0" step="10">
+    </div>
+    <div class="field">
+      <label>出数（张）</label>
+      <input type="number" id="free" value="50" min="0" step="1">
+    </div>
+    <div class="field">
+      <label>覆膜（元/张）</label>
+      <input type="number" id="film" value="0.4" min="0" step="0.01">
+    </div>
+  </div>
+</div>
+
+<div class="card p2">
+  <h2>尺寸 × 数量（可多行，每行单独计算）</h2>
+  <div class="rowg thead">
+    <div class="c">序号</div>
+    <div class="c">长(mm)</div>
+    <div class="c">宽(mm)</div>
+    <div class="c">数量(张)</div>
+    <div class="c">单张纸价(元)</div>
+    <div class="c">小计</div>
+    <div></div>
+  </div>
+  <div id="rows"></div>
+  <button class="addrow" id="btnAdd">＋ 添加一行</button>
+</div>
+
+<div class="totalbar">
+  <div class="lbl">汇总合计</div>
+  <div class="num" id="total">¥ 0.00</div>
+</div>
+
+<div class="actions">
+  <button class="btn-copy" id="btnCopy">复制报价</button>
+</div>
+
+<footer>copyright©OldK</footer>
+</div>
+
+<script>
+function $(id){ return document.getElementById(id); }
+function v(id){ return parseFloat($(id).value) || 0; }
+function fmt(n){ return '¥ ' + n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmt3(n){ return n.toLocaleString('zh-CN',{minimumFractionDigits:3,maximumFractionDigits:3}); }
+
+function renumber(){
+  document.querySelectorAll('.row .idx').forEach(function(el,i){ el.textContent = i+1; });
+}
+
+function addRow(len, wid, qty){
+  var div = document.createElement('div');
+  div.className = 'row rowg';
+  div.innerHTML =
+    '<span class="idx"></span>' +
+    '<input type="number" class="rl" value="' + (len||'') + '" min="0" step="1" placeholder="长">' +
+    '<input type="number" class="rw" value="' + (wid||'') + '" min="0" step="1" placeholder="宽">' +
+    '<input type="number" class="rq" value="' + (qty||'') + '" min="0" step="1" placeholder="数量">' +
+    '<div class="show s1"><div class="k">纸价</div><div class="v">--</div></div>' +
+    '<div class="show s2"><div class="k">小计</div><div class="v">--</div></div>' +
+    '<button class="del" title="删除此行">×</button>';
+  $('rows').appendChild(div);
+  div.querySelector('.del').addEventListener('click', function(){
+    if(document.querySelectorAll('.row').length > 1){ div.remove(); renumber(); calc(); }
+    else { alert('至少保留一行'); }
+  });
+  div.querySelectorAll('input').forEach(function(inp){
+    inp.addEventListener('input', calc);
+  });
+  renumber();
+  calc();
+  return div;
+}
+
+function calc(){
+  var weight = parseFloat($('gram').value) || 0;
+  var ton = v('ton'), setup = v('setup'), free = v('free'), film = v('film');
+  var grand = 0, rowsData = [];
+
+  document.querySelectorAll('.row').forEach(function(row){
+    var len = parseFloat(row.querySelector('.rl').value) || 0;
+    var wid = parseFloat(row.querySelector('.rw').value) || 0;
+    var qty = parseFloat(row.querySelector('.rq').value) || 0;
+
+    // 单张纸价：输入 mm 和 g/m²，计算时换算单位
+    // 面积(m²) = (长÷1000) × (宽÷1000)；克重 g/m² ÷1000 = kg/m²
+    // 单张重量(kg) = 面积 × 克重(kg/m²)；吨价(元/吨) ÷1000 = 元/kg
+    var areaM = (len / 1000) * (wid / 1000);
+    var kgPerSheet = areaM * (weight / 1000);
+    var sheet = kgPerSheet * ton / 1000;
+    var sub = (sheet + film) * (qty + free) + setup - free * film;
+    grand += sub;
+    var vs = row.querySelectorAll('.show .v');
+    vs[0].textContent = fmt3(sheet);
+    vs[1].textContent = fmt(sub);
+    rowsData.push({len:len, wid:wid, qty:qty, sheet:sheet, sub:sub});
+  });
+
+  $('total').textContent = fmt(grand);
+
+  var lines = rowsData.map(function(r,i){
+    return '第' + (i+1) + '行：' + r.len + '×' + r.wid + 'mm × ' + r.qty + '张｜单张纸价 ' + r.sheet.toFixed(3) + ' 元｜小计 ' + r.sub.toFixed(2) + ' 元';
+  });
+  window.__text = '【印即得彩卡报价】\n' +
+    '基础参数：\n' +
+    '纸张：' + $('gram').value + 'G' + $('ptype').value + '\n' +
+    '吨价：' + ton + ' 元\n' +
+    '上机费：' + setup + ' 元\n' +
+    '出数：' + free + ' 张\n' +
+    '覆膜：' + film + ' 元/张\n' +
+    '明细：\n' + lines.join('\n') + '\n' +
+    '汇总合计：' + grand.toFixed(2) + ' 元';
+}
+
+$('btnAdd').addEventListener('click', function(){ addRow(); });
+
+$('btnCopy').addEventListener('click', function(){
+  var t = window.__text || '';
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){ alert('已复制'); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = t; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); alert('已复制');
+  }
+});
+
+['gram','ptype','ton','setup','free','film'].forEach(function(id){
+  $(id).addEventListener('input', calc);
+  $(id).addEventListener('change', calc);
+});
+
+addRow();
+</script>
+</body>
+</html>
