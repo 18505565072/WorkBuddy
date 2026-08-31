@@ -59,12 +59,12 @@ header .tag{font-size:14px;font-weight:600;color:rgba(255,255,255,.9);margin-lef
 .formula-card .f-note{font-size:11px;color:var(--sub);margin-top:5px;padding-top:5px;border-top:1px dashed #93c5fd}
 
 /* 报价明细 */
-.detail-head{display:grid;grid-template-columns:28px 132px 54px 64px 78px 24px;justify-content:space-between;gap:6px;padding:0 6px 8px;font-size:12px;color:var(--sub);font-weight:600}
+.detail-head{display:grid;grid-template-columns:28px 132px 54px 64px 64px 82px 24px;justify-content:space-between;gap:6px;padding:0 6px 8px;font-size:12px;color:var(--sub);font-weight:600}
 .detail-head > *{min-width:0}
 .detail-head .c{text-align:center;white-space:nowrap}
 .detail-head .r{text-align:right;white-space:nowrap}
 
-.detail-row{display:grid;grid-template-columns:28px 132px 54px 64px 78px 24px;justify-content:space-between;gap:6px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 6px;margin-bottom:6px;transition:border-color .2s,box-shadow .2s}
+.detail-row{display:grid;grid-template-columns:28px 132px 54px 64px 64px 82px 24px;justify-content:space-between;gap:6px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 6px;margin-bottom:6px;transition:border-color .2s,box-shadow .2s}
 .detail-row > *{min-width:0}
 .detail-row:hover{border-color:#93c5fd;box-shadow:0 2px 8px rgba(37,99,235,.06)}
 .detail-row .idx{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#10b981,#34d399);color:#fff;font-size:12px;font-weight:700;border-radius:8px;text-align:center;margin:0 auto}
@@ -75,6 +75,7 @@ header .tag{font-size:14px;font-weight:600;color:rgba(255,255,255,.9);margin-lef
 .detail-row .qty input{width:100%;min-width:0;padding:8px 4px;border:1.5px solid var(--line);border-radius:8px;font-size:15px;text-align:center;font-weight:700;transition:border-color .2s}
 .detail-row .qty input:focus{outline:none;border-color:var(--primary2);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
 .detail-row .price{text-align:right;font-size:13px;font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums;white-space:nowrap}
+.detail-row .film{text-align:right;font-size:13px;font-weight:700;color:#64748b;font-variant-numeric:tabular-nums;white-space:nowrap}
 .detail-row .sub{text-align:right;font-size:15px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
 .detail-row .del{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:50%;font-size:14px;cursor:pointer;transition:background .15s}
 .detail-row .del:hover{background:#fee2e2}
@@ -106,16 +107,17 @@ footer{text-align:center;color:#94a3b8;font-size:12px;padding:12px 0 6px}
   header h1{font-size:18px}
   .card{padding:10px;margin-bottom:6px}
   .param-grid{grid-template-columns:1fr}
-  .detail-head{grid-template-columns:22px 110px 38px 44px 56px 18px;gap:3px;padding:0 4px 6px;font-size:10px}
-  .detail-row{grid-template-columns:22px 110px 38px 44px 56px 18px;gap:3px;padding:6px 4px;margin-bottom:5px}
-  .detail-row .idx{width:20px;height:20px;font-size:11px;border-radius:6px}
+  .detail-head{grid-template-columns:16px 84px 28px 44px 44px 56px 16px;gap:3px;padding:0 4px 6px;font-size:10px}
+  .detail-row{grid-template-columns:16px 84px 28px 44px 44px 56px 16px;gap:3px;padding:6px 4px;margin-bottom:5px}
+  .detail-row .idx{width:18px;height:18px;font-size:11px;border-radius:6px}
   .detail-row .dim{gap:2px}
-  .detail-row .dim input{max-width:48px;padding:6px 2px;font-size:13px;font-weight:700}
-  .detail-row .dim .x{font-size:10px}
+  .detail-row .dim input{max-width:36px;padding:6px 2px;font-size:13px;font-weight:700}
+  .detail-row .dim .x{font-size:10px;padding:0 1px}
   .detail-row .qty input{padding:6px 2px;font-size:13px;font-weight:700}
   .detail-row .price{font-size:11.5px}
-  .detail-row .sub{font-size:14px}
-  .detail-row .del{width:20px;height:20px;font-size:12px}
+  .detail-row .film{font-size:11.5px}
+  .detail-row .sub{font-size:13.5px}
+  .detail-row .del{width:16px;height:16px;font-size:11px;min-width:16px}
   .total-card{padding:8px 12px;margin-bottom:6px}
   .total-card .lbl{font-size:16px}
   .total-card .num{font-size:16px}
@@ -189,6 +191,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;padding:12px 0 6px}
     <div class="c">尺寸 (mm)</div>
     <div class="c">数量</div>
     <div class="r">单张纸价</div>
+    <div class="r">单张覆膜</div>
     <div class="r">小计</div>
     <div></div>
   </div>
@@ -235,6 +238,7 @@ function addRow(len, wid, qty){
     '</div>' +
     '<div class="qty"><input type="number" class="rq" value="' + (qty||'') + '" min="1" step="1" placeholder="数量"></div>' +
     '<div class="price">--</div>' +
+    '<div class="film">--</div>' +
     '<div class="sub">--</div>' +
     '<button class="del" title="删除">×</button>';
   $('rows').appendChild(div);
@@ -279,6 +283,7 @@ function calc(){
 
     if(!rl.value || !rw.value || !rq.value || len <= 0 || wid <= 0 || qty <= 0) {
       row.querySelector('.price').textContent = '—';
+      row.querySelector('.film').textContent = '—';
       row.querySelector('.sub').textContent = '—';
       return;
     }
@@ -293,6 +298,7 @@ function calc(){
     grand += sub;
 
     row.querySelector('.price').textContent = fmt3(sheet);
+    row.querySelector('.film').textContent = fmt3(filmPerSheet);
     row.querySelector('.sub').textContent = fmt(sub);
     rowsData.push({len:len, wid:wid, qty:qty, sheet:sheet, sub:sub});
   });
