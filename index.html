@@ -86,7 +86,7 @@ header .tag{font-size:14px;font-weight:600;color:rgba(255,255,255,.9);margin-lef
 /* 合计 */
 .total-card{background:var(--card);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1.5px solid var(--line);margin-bottom:8px}
 .total-card .lbl{color:var(--dark);font-size:18px;font-weight:700}
-.total-card .num{color:var(--dark);font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.total-card .num{color:var(--dark);font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
 .total-card .num.empty{color:#94a3b8;font-size:22px;font-weight:700}
 
 /* 操作 */
@@ -95,8 +95,8 @@ header .tag{font-size:14px;font-weight:600;color:rgba(255,255,255,.9);margin-lef
 .action-bar button:active{transform:scale(.98)}
 .btn-copy{background:var(--primary);color:#fff;box-shadow:0 3px 10px rgba(37,99,235,.3)}
 .btn-copy:hover{background:var(--primary2)}
-.btn-copied{background:#1e40af !important;color:#fff !important;box-shadow:0 3px 10px rgba(30,64,175,.4) !important}
-.btn-warn{color:#facc15 !important}
+.btn-copied{background:#000000 !important;color:#ffffff !important;box-shadow:0 3px 10px rgba(0,0,0,.4) !important}
+.btn-warn{background:#dc2626 !important;color:#ffffff !important;box-shadow:0 3px 10px rgba(220,38,38,.4) !important}
 
 footer{text-align:center;color:#94a3b8;font-size:12px;padding:12px 0 6px}
 
@@ -120,7 +120,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;padding:12px 0 6px}
   .detail-row .del{width:16px;height:16px;font-size:11px;min-width:16px}
   .total-card{padding:8px 12px;margin-bottom:6px}
   .total-card .lbl{font-size:16px}
-  .total-card .num{font-size:16px}
+  .total-card .num{font-size:22px}
 }
 </style>
 </head>
@@ -339,6 +339,7 @@ $('btnCopy').addEventListener('click', function(){
   });
   if(empty){
     btn.textContent = '请先填写明细';
+    btn.classList.remove('btn-copied');
     btn.classList.add('btn-warn');
     setTimeout(function(){
       btn.textContent = '复制报价';
@@ -350,6 +351,7 @@ $('btnCopy').addEventListener('click', function(){
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(t).then(function(){
       btn.textContent = '已复制';
+      btn.classList.remove('btn-warn');
       btn.classList.add('btn-copied');
       setTimeout(function(){
         btn.textContent = '复制报价';
@@ -361,6 +363,7 @@ $('btnCopy').addEventListener('click', function(){
     ta.value = t; document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); document.body.removeChild(ta);
     btn.textContent = '已复制';
+    btn.classList.remove('btn-warn');
     btn.classList.add('btn-copied');
     setTimeout(function(){
       btn.textContent = '复制报价';
