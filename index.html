@@ -168,7 +168,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;padding:12px 0 6px}
       <input type="number" class="param-input" id="free" value="50" min="0" max="200" step="1">
     </div>
     <div class="param-row">
-      <label class="param-label">覆膜（元/张）</label>
+      <label class="param-label">覆膜（元/m²）</label>
       <input type="number" class="param-input" id="film" value="0.4" min="0" max="10" step="0.01">
     </div>
   </div>
@@ -177,8 +177,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;padding:12px 0 6px}
 <div class="formula-card">
   <div class="f-title">计算公式</div>
   <div class="f-line">单张纸价 = <code>(长÷1000)</code> × <code>(宽÷1000)</code> × <code>(克重÷1000)</code> × 吨价 ÷ 1000</div>
-  <div class="f-line">小计 = <code>(单张纸价 + 覆膜)</code> × <code>(数量 + 出数)</code> + 上机费 − 出数 × 覆膜</div>
-  <div class="f-note">单位换算：尺寸 mm→m、克重 g/m²→kg/m²、重量 kg→吨</div>
+  <div class="f-line">单张覆膜费 = <code>(长÷1000)</code> × <code>(宽÷1000)</code> × 覆膜单价</div>
+  <div class="f-line">小计 = <code>(单张纸价 + 单张覆膜费)</code> × <code>(数量 + 出数)</code> + 上机费 − 出数 × 单张覆膜费</div>
+  <div class="f-note">单位换算：尺寸 mm→m、克重 g/m²→kg/m²、重量 kg→吨、覆膜 元/m²</div>
 </div>
 
 <div class="card">
@@ -287,7 +288,8 @@ function calc(){
     var areaM = (len / 1000) * (wid / 1000);
     var kgPerSheet = areaM * (weight / 1000);
     var sheet = kgPerSheet * ton / 1000;
-    var sub = (sheet + film) * (qty + free) + setup - free * film;
+    var filmPerSheet = areaM * film;
+    var sub = (sheet + filmPerSheet) * (qty + free) + setup - free * filmPerSheet;
     grand += sub;
 
     row.querySelector('.price').textContent = fmt3(sheet);
@@ -312,7 +314,7 @@ function calc(){
     return (i+1) + '. ' + r.len + '×' + r.wid + 'mm｜数量 ' + r.qty + '｜单张纸价 ' + r.sheet.toFixed(3) + '元｜小计 ' + r.sub.toFixed(2) + '元';
   });
   window.__text =
-    '纸张：' + $('gsm').value + ' ' + $('paperType').value + '｜吨价 ' + ton + '元｜上机费 ' + setup + '元｜出数 ' + free + '张｜覆膜 ' + film + '元/张\n' +
+    '纸张：' + $('gsm').value + ' ' + $('paperType').value + '｜吨价 ' + ton + '元｜上机费 ' + setup + '元｜出数 ' + free + '张｜覆膜 ' + film + '元/m²\n' +
     '\n' +
     lines.join('\n') + '\n' +
     '———————————————————\n' +
