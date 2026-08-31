@@ -300,7 +300,7 @@ function calc(){
     row.querySelector('.price').textContent = fmt3(sheet);
     row.querySelector('.film').textContent = fmt3(filmPerSheet);
     row.querySelector('.sub').textContent = fmt(sub);
-    rowsData.push({len:len, wid:wid, qty:qty, sheet:sheet, sub:sub});
+    rowsData.push({len:len, wid:wid, qty:qty, sheet:sheet, film:filmPerSheet, sub:sub});
   });
 
   if(validRows === 0) {
@@ -317,7 +317,7 @@ function calc(){
     ' ' + p(now.getHours()) + ':' + p(now.getMinutes()) + ':' + p(now.getSeconds());
 
   var lines = rowsData.map(function(r,i){
-    return (i+1) + '. ' + r.len + '×' + r.wid + 'mm｜数量 ' + r.qty + '｜单张纸价 ' + r.sheet.toFixed(3) + '元｜小计 ' + r.sub.toFixed(2) + '元';
+    return (i+1) + '. ' + r.len + '×' + r.wid + 'mm｜数量 ' + r.qty + '｜单张纸价 ' + r.sheet.toFixed(3) + '元｜单张覆膜 ' + r.film.toFixed(3) + '元｜小计 ' + r.sub.toFixed(2) + '元';
   });
   window.__text =
     '纸张：' + $('gsm').value + ' ' + $('paperType').value + '｜吨价 ' + ton + '元｜上机费 ' + setup + '元｜出数 ' + free + '张｜覆膜 ' + film + '元/m²\n' +
